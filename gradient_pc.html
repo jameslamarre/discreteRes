@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        overflow: hidden;
+        margin: 0px;
+        padding: 0px;
+      }
+div {-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+    </style>
+  </head>
+  <body onTouchstart="eraseAll();" onMousedown="eraseAll();"> 
+    <canvas id="myCanvas"></canvas>
+    <script>
+//onTouchstart
+      var window;
+      var document;
+      var fullWidth = window.innerWidth;
+      var fullHeight = window.innerHeight;
+      var step = 1;
+      var steps = 1;
+      var context0;
+
+      var canvas = document.getElementById('myCanvas');
+
+      canvas.width = fullWidth;
+      canvas.height = fullHeight;
+
+      var r0 = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,2);
+      var g0 = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,2);
+      var b0 = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,2);
+      var rN = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,2);
+      var gN = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,2);
+      var bN = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,2);
+
+      var decr0 = parseInt(r0, 16);
+      var decg0 = parseInt(g0, 16);
+      var decb0 = parseInt(b0, 16);
+      var decrN = parseInt(rN, 16);
+      var decgN = parseInt(gN, 16);
+      var decbN = parseInt(bN, 16);
+
+      var unitr0 = decrN - decr0;
+      var unitg0 = decgN - decg0;
+      var unitb0 = decbN - decb0;
+
+      var height = fullHeight;
+
+      var decrName;
+      var decgName;
+      var decbName;
+      var incrementaly;
+      var r;
+      var g;
+      var b;
+      var textR;
+      var textG;
+      var textB;
+      var text;
+      var randText;
+      var possible;
+      var textSize;
+      var textOpac;
+      var i;
+
+
+function makeGradient()
+{
+      steps++;
+      var fieldheight = height / steps;
+
+      context0 = canvas.getContext('2d');
+      
+      context0.beginPath();
+      context0.rect(0, 0, fullWidth, fieldheight);
+      context0.fillStyle = '#' + r0 + g0 + b0;
+      context0.fill();
+      context0.lineWidth = 0;
+      context0.strokeStyle = '#' + r0 + g0 + b0;
+      context0.stroke();
+
+      var unitr = unitr0 - unitr0 % steps;
+      unitr = unitr / steps;
+
+      var unitg = unitg0 - unitg0 % steps;
+      unitg = unitg / steps;
+
+
+      var unitb = unitb0 - unitb0 % steps;
+      unitb = unitb / steps;
+
+while (step < steps)
+{
+      decrName = 'decr'+step;
+      decgName = 'decg'+step;
+      decbName = 'decb'+step;
+
+      incrementaly = fieldheight * step;
+
+      r = decr0 + step * unitr;
+      g = decg0 + step * unitg;
+      b = decb0 + step * unitb;
+
+      r = r.toString(16);
+      g = g.toString(16);
+      b = b.toString(16);
+
+while (r.length<2)
+{
+      r = '0' + r;
+}
+
+while (g.length<2)
+{
+      g = '0' + g;
+}
+
+while (b.length<2)
+{
+      b = '0' + b;
+}
+
+      context0.beginPath();
+      context0.rect(0, incrementaly, fullWidth, fieldheight);
+      context0.fillStyle = '#' + r + g + b;
+      context0.fill();
+      context0.lineWidth = 0;
+      context0.strokeStyle = '#' + r + g + b;
+      context0.stroke();
+      step++;
+}
+}
+
+function eraseAll()
+{
+      step = 1;
+      context0.clearRect(0, 0, canvas.width, canvas.height); 
+      makeGradient();  
+
+      textR = Math.floor(Math.random() * unitr0);
+      textG = Math.floor(Math.random() * unitg0);
+      textB = Math.floor(Math.random() * unitb0);
+
+      textR = textR + decr0;
+      textG = textG + decg0;
+      textB = textB + decb0;
+
+      textR = textR.toString(16);
+      textG = textG.toString(16);
+      textB = textB.toString(16);
+
+while (textR.length<2)
+{
+      textR = '0' + textR;
+}
+
+while (textG.length<2)
+{
+      textG = '0' + textG;
+}
+
+while (textB.length<2) 
+{
+      textB = '0' + textB;
+}
+
+      text = "";
+      randText = Math.floor(Math.random() * 7);
+      possible = "eeeeeeeeeeeeaaaaaaaaaiiiiiiiiioooooooonnnnnnrrrrrrttttttllllssssuuuuddddgggbbccmmppffhhvvwwyykjxqz";
+
+      for( var i=0; i < randText; i++ )
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      textSize = Math.floor(Math.random() * 1000) + 100;
+      textOpac = Math.floor(Math.random() * 1) + .4;
+
+      var elem = document.createElement("div");
+      elem.textContent = text;
+      elem.style.position = "absolute";
+      elem.style.left = Math.round(Math.random() * fullWidth -100) + "px";
+      elem.style.color = '#' + textR + textG + textB;
+      elem.style.opacity = textOpac;
+      elem.style.fontSize = textSize + '%';
+      elem.style.top = Math.round(Math.random() * fullHeight - 100) + "px";
+      document.body.appendChild(elem); 
+
+}
+
+      makeGradient();
+    </script>
+  </body>
+</html>
